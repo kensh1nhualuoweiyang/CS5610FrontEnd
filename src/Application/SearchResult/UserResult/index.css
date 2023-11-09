@@ -1,0 +1,23 @@
+.wd-search-user-result {
+    flex: 1;
+}
+
+.wd-search-user-result .list-group-item{
+    border-left: 0px;
+    border-right: 0px;
+}
+
+.wd-search-user-result svg{
+    height: 50px;
+    width: 50px;
+}
+
+
+.wd-search-user-result a{
+   text-decoration: none;
+   color: black;
+}
+
+.wd-search-user-result a span:hover{
+    color: #31c27c;
+ }

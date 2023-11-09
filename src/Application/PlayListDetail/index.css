@@ -1,0 +1,37 @@
+.wd-playlist-detail{
+    margin-top: 250px;
+
+}
+
+.wd-playlist-detail-container{
+    background-color: rgb(241, 241, 241);
+}
+
+.wd-playlist-detail-info{
+    height: 300px;
+}
+
+.wd-playlist-detail table img{
+    width: 120px;
+    height: 120px;
+}
+
+.wd-playlist-detail table tr {
+    text-align: center;
+}
+
+.wd-playlist-detail table td {
+    vertical-align: middle; 
+    white-space: nowrap;
+    text-align: center;
+}
+
+.wd-playlist-detail a{
+    text-decoration: none;
+    color: rgb(61, 61, 61);
+}
+
+
+.wd-playlist-detail a:hover{
+    color: #31c27c;
+}

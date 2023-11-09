@@ -1,0 +1,22 @@
+.wd-song-result{
+    flex: 1;
+    width: 900px;
+}
+
+.wd-song-result img{
+    width: 70px;
+    height: 70px;
+}
+
+.wd-song-result li{
+    border-left: none;
+    border-right: none;
+}
+
+.wd-song-result a{
+    text-decoration: none;
+    color: black;
+}
+.wd-song-result a:hover{
+    color: #31c27c;
+}

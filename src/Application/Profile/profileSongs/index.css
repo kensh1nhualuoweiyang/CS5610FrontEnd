@@ -1,0 +1,9 @@
+.wd-profile-songs{
+    text-decoration: none;
+    color: black;
+}
+
+.wd-profile-songs:hover{
+    color: #31c27c;
+
+}

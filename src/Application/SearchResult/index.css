@@ -1,0 +1,12 @@
+.wd-search-result{
+    margin-top: 200px;
+    margin-left: 400px;
+    margin-right: 400px;
+}
+
+.wd-search-body{
+    margin-left: 150px;
+    flex: 1;
+    position: fixed;
+    width: 900px;
+}

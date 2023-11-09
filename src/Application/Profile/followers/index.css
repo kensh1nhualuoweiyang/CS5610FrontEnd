@@ -1,0 +1,22 @@
+.wd-pFollower{
+
+   
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.wd-pFollower svg{
+    height: 30px;
+    width: 30px;
+}
+
+.wd-pFollower a{
+    text-decoration: none;
+    color: black;
+}
+
+.wd-pFollower a:hover{
+    color: #31c27c;
+}

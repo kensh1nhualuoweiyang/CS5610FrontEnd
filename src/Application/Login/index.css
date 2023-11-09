@@ -1,0 +1,22 @@
+.wd-login-content {
+    display: flex;
+    flex-direction: column;
+    margin-top: 200px;
+    justify-content: center;
+    align-items: center;
+}
+
+.wd-login-form {
+    border: 3px solid rgb(177, 177, 177);
+    border-radius: 15px;
+    width: 550px;
+    padding: 20px;
+}
+
+.wd-login-error-msg{
+    color: red;
+    font-weight: 550;
+}
+.wd-login-form h4 {
+    text-align: center; /* Center the "Register" title */
+}

@@ -1,0 +1,50 @@
+.wd-header-body {
+    height: 18vh;
+    background-color: white;
+    flex-shrink: 0;
+
+}
+
+.wd-header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    background-color: white;
+    height: 160px;
+    flex-wrap: nowrap;
+}
+
+
+
+.wd-header-content img {
+    width: 70px;
+}
+
+.wd-header-nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+nav {
+    flex: 1;
+}
+
+.navbar-nav {
+    align-items: center;
+    width: 100%;
+}
+
+.wd-header-end {
+    margin-left: auto;
+}
+
+
+
+.wd-header-sub-nav .navbar-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; 
+    
+}

@@ -1,0 +1,60 @@
+.wd-playlist-slide {
+    height: 450px;
+}
+
+.carousel-inner {
+    height: 100%;
+    
+}
+.carousel-inner h4{
+    text-align: center;
+    margin-top: 7px;
+    margin-bottom: 0;
+}
+
+.wd-playlist-slide-item {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    height: 100%;
+}
+
+.wd-playlist-card  {
+    flex-shrink: 0;
+    width: 250px;
+    max-height: 300px;
+    border: transparent;
+    display: flex;
+}
+
+.wd-playlist-slide-item.card-img-top { /* Target only the card images */
+    height: 60%;
+    width: 250px;
+    margin: 0 auto; 
+    display: block;
+}
+
+.wd-color-black {
+    color: rgb(36, 34, 34);
+    background-color: rgb(36, 34, 34);
+}
+
+.wd-playlist-slide-element{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#playListCarousel{
+    background-color: rgb(218, 213, 213);
+    margin-top: 170px;
+}
+
+.wd-playlist-slide-element a{
+    text-decoration: none;
+}
+
+.wd-playlist-slide-element a :hover{
+    text-decoration: underline;
+}
+
