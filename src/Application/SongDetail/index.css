@@ -7,10 +7,11 @@
 }
 .wd-song-detail-holder{
     background-color: rgb(236, 236, 236);
+    display: flex;
+    flex-direction: column;
 }
 
-.wd-song-comments,
-.wd-song-lyrics{
+.wd-song-comments{
     white-space: pre-line;
 }
 
@@ -18,6 +19,16 @@
     height: 30px;
     width: 30px;
 }
+.wd-comment-action{
+    flex:1;
+    align-items: right;
+    text-align: right;
+}
+.wd-comment-action button{
+    padding: 0;
+    margin-right: 0;
+}
+
 .wd-song-comments ul li{
     background-color: transparent;
     border-left: none;

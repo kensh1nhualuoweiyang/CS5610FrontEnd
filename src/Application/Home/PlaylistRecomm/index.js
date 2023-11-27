@@ -1,8 +1,7 @@
 import "./index.css"
 import coverImg from "./cover.jpg"
-import { Link, Route, Routes } from "react-router-dom";
+import { Link } from "react-router-dom";
 import CarouselCtrl from "../CarouselCtrl";
-import Playlist from "../../PlayListDetail";
 
 function PlaylistRecomm() {
 
@@ -37,7 +36,7 @@ function PlaylistRecomm() {
     return (
         <div id="playListCarousel" className="wd-playlist-slide carousel slide" >
             <div className="carousel-inner mb-3">
-                <h4>Top Playlist</h4>
+                <h4>Top Playlist Among Community</h4>
                 {
                     Array.from({ length: slides.length }).map((_, slideIndex) => (
                         <div className={`wd-playlist-slide-item carousel-item ${slideIndex === 0 && 'active'}`}>
@@ -51,7 +50,7 @@ function PlaylistRecomm() {
                                         <div className="card-body py-0 px-0">
                                             <h5 className="card-title mb-0">{item.title}</h5>
                                         </div>
-                                        <p class="card-text">View: {item.view}</p>
+                                        <p class="card-text">Likes: {item.view}</p>
                                     </Link>
 
                                 ))}

@@ -1,12 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./index.css"
 import logoImg from "./logo.png"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
+import * as client from "../client"
 function Header() {
     const { pathname } = useLocation();
     const [keyword, setKeyword] = useState("")
+    const [user, setUser] = useState()
+    const navigate = useNavigate()
+    useEffect(() => {
+        const getUser = async () => {
+            const response = await client.getCurrUser();
+            setUser(response)
+        }
+        getUser()
+    }, [pathname])
 
-    const subNav = ["Rock", "Pop", "R&B Hip-Hop", "Latin", "Country", "Classical", "EDM", "Jazz"]
+    const handleLogOut = async () => {
+        await client.logOut()
+        setUser(null)
+        navigate("/Application")
+    }
+
     return (
         <div className="wd-header-body fixed-top">
             <div className="wd-header-content mt-2">
@@ -18,37 +33,25 @@ function Header() {
                                 <Link className={`nav-link ${decodeURIComponent(pathname).includes("home") && "active"}`} to={"./home"}>Home</Link>
                             </li>
 
-                            <li className="nav-item" key="profile">
-                                <Link className={`nav-link ${decodeURIComponent(pathname).includes("Profile") && "active"}`} to={"./Profile/123"}>My Profile</Link>
-                            </li>
+                            {user && <li className="nav-item" key="profile">
+                                <Link className={`nav-link ${decodeURIComponent(pathname).includes("Profile") && "active"}`} to={`./Profile/${user._id}`}>My Profile</Link>
+                            </li>}
 
                             <li className="nav-item ml-auto">
                                 <div className="wd-header-end d-flex">
                                     <form className="d-flex" role="search">
                                         <input className="form-control me-2" type="search" placeholder="Search For Song, Artist, or Playlist" onChange={(e) => (setKeyword(e.target.value))} />
-                                        <Link to={`/Application/Search/${keyword}`} className="btn btn-outline-dark me-2" type="submit">Search</Link>
+                                        <Link to={`/Application/Search/${keyword}`} className="btn btn-outline-dark me-2">Search</Link>
                                     </form>
-                                    <Link to={"/Application/Register"} className="btn btn-outline-dark me-2">Register</Link>
-                                    <Link to={"/Application/Login"} className="btn btn-outline-dark me-2">Login</Link>
-
+                                    {user ? <button className="btn btn-outline-dark me-2" onClick={handleLogOut}>Logout</button> : <>
+                                        <Link to={"/Application/Register"} className="btn btn-outline-dark me-2">Register</Link>
+                                        <Link to={"/Application/Login"} className="btn btn-outline-dark me-2">Login</Link></>}
                                 </div>
                             </li>
                         </ul>
                     </nav>
                 </div>
                 <hr className="mb-0" />
-
-                <nav className="wd-header-sub-nav navbar navbar-expand-sm">
-                    <ul className="navbar-nav">
-                        {
-                            subNav.map((item) => (
-                                <li className="nav-item" key={item}>
-                                    <Link className="nav-link me-2" to={`Genre/${item}`}>{item}</Link>
-                                </li>
-                            ))
-                        }
-                    </ul>
-                </nav>
             </div>
         </div>
 

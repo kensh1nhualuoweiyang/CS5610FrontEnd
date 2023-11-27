@@ -35,7 +35,7 @@ function SongRecomm() {
         <>
             <div id="songRecomm" className="wd-song-slide carousel slide" >
                 <div className="carousel-inner">
-                    <h4 className="mt-4 mb-3">Top Songs</h4>
+                    <h4 className="mt-4 mb-3">Top Songs Among Community</h4>
                     {
                         Array.from({ length: songRec.length }).map((item, index) => (
                             <div className={`wd-song-recomm-item carousel-item ${index === 0 && "active"}`}>

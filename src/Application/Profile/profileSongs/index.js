@@ -1,9 +1,9 @@
 import { Link, useParams } from "react-router-dom"
 import "./index.css"
-
+import { FcDislike } from "react-icons/fc";
 function ProfileSongs() {
     const sampleSongID = ["1","2","3"];
-    const {uID} = useParams();
+    const {uid} = useParams();
 
     return (
         <div className="container mt-3">
@@ -21,9 +21,8 @@ function ProfileSongs() {
                                 <Link className="wd-profile-songs" key={item} to={`/Application/Songs/${item}`} >
                                     {item}
                                 </Link>
-                                <div className="float-end">
-                                    <Link className="btn btn-primary me-3" to={`/Application/${uID}/${item}/creator`}>Edit</Link>
-                                    <button className="btn btn-danger">Delete</button>
+                                <div className="float-end"> 
+                                    <button className="btn btn-transparent"><FcDislike/></button>
                                 </div>
                             </div>
                         ))

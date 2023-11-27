@@ -47,14 +47,10 @@
 
 #playListCarousel{
     background-color: rgb(218, 213, 213);
-    margin-top: 170px;
+    margin-top: 140px;
 }
 
 .wd-playlist-slide-element a{
     text-decoration: none;
-}
-
-.wd-playlist-slide-element a :hover{
-    text-decoration: underline;
 }
 

@@ -2,28 +2,34 @@
 import "./index.css"
 
 import cover from "./cover.jpg"
-import { Link } from "react-router-dom"
+import { Link, useLocation, useParams } from "react-router-dom"
+import * as client from "../../client"
+import { useState } from "react"
+import { useEffect } from "react"
 function SongResult() {
-
-    const resultExample = [
-        { title: "Song title", author: "Example author", view: 0, id: 0 },
-        { title: "Song title", author: "Example author", view: 0, id: 0 },
-        { title: "Song title", author: "Example author", view: 0, id: 0 },
-        { title: "Song title", author: "Example author", view: 0, id: 0 }
-    ]
+    const [songs,setSongs] = useState(null)
+    const {pathname} = useLocation()
+    const {keyword} = useParams()
+    useEffect(() => {
+        const getSongResult = async () =>{
+            const data = await client.searchSongs(keyword)
+            setSongs(data.data)
+        }
+        getSongResult()
+    },[pathname])
     const examplePlaylist = []
     return (
         <div className="wd-song-result">
             <ul className="list-group">
                 {
-                    resultExample.map((item) => (
+                    songs && songs.map((item) => (
                         <li className="list-group-item list-group-item-action">
-                            <img src={cover} />
+                            <img src={item.album.cover} />
                             <Link to={`/Application/Songs/${item.id}`} className="ms-5 me-5">{item.title}</Link>
-                            <Link to={`/Application/Profile/${item.author}`} className="ms-5 me-5">{item.author}</Link>
-                            <span className="me-5">View : {item.view}</span>
-                            <div className="btn-group ms-5">
-                                <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            
+                            <div className="btn-group ms-5 float-end">
+                            
+                                <button className="btn btn-secondary dropdown-toggle ms-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Add to Playlist
                                 </button>
                                 <ul className="dropdown-menu">
@@ -33,10 +39,10 @@ function SongResult() {
                                             <li><button type="button" className="dropdown-item" >{item}</button></li>
                                         )):
                                         <li className="ms-3">No Playlist Found</li>
-                                    }
-                                    
+                                    }         
                                 </ul>
                             </div>
+                            <span className="me-5 float-end">{item.artist.name}</span>
                         </li>
 
                     ))

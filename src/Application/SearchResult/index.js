@@ -7,7 +7,7 @@ import PlaylistResult from "./PlaylistResult"
 import SongResult from "./SongResult"
 
 function SearchResult() {
-    const resultTitle = ["Users", "Songs", "Playlists"]
+    const resultTitle = ["Songs","Users", "Playlists"]
     const { pathname } = useLocation()
     const {keyword} = useParams()
     return (
@@ -24,7 +24,7 @@ function SearchResult() {
             </ul>
             <div className="wd-search-body">
                 <Routes>
-                    <Route path="/" element={<Navigate to={"Users"} />} />
+                    <Route path="/" element={<Navigate to={"Songs"} />} />
                     <Route path="Users" element={<UserResult />} />
                     <Route path="Playlists" element={<PlaylistResult />} />
                     <Route path="Songs" element={<SongResult />} />
