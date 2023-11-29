@@ -1,5 +1,5 @@
 .wd-playlist-detail{
-    margin-top: 250px;
+    margin-top: 120px;
 
 }
 
@@ -19,7 +19,9 @@
 .wd-playlist-detail table tr {
     text-align: center;
 }
-
+.wd-playlist-detail table {
+    height: 100vh;
+}
 .wd-playlist-detail table td {
     vertical-align: middle; 
     white-space: nowrap;

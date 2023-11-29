@@ -6,7 +6,7 @@ import Register from "./Register"
 import Profile from "./Profile"
 import Playlist from "./PlayListDetail"
 import SongDetail from "./SongDetail"
-import GenreRec from "./GenreRec"
+
 import SearchResult from "./SearchResult"
 
 function Application(){
@@ -21,7 +21,6 @@ function Application(){
                 <Route path="Songs/:sid/*" element={<SongDetail />} />
                 <Route path="Playlist/:pid/*" element={<Playlist />} />
                 <Route path="Profile/:uid/*" element={<Profile/>}/>
-                <Route path="Genre/:gName/*" element={<GenreRec/>}/>
                 <Route path="Search/:keyword/*" element={<SearchResult/>}/> 
             </Routes>
         </div>

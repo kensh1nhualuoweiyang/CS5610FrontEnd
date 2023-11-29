@@ -8,11 +8,11 @@ function Header() {
     const [keyword, setKeyword] = useState("")
     const [user, setUser] = useState()
     const navigate = useNavigate()
+    const getUser = async () => {
+        const response = await client.getCurrUser();
+        setUser(response)
+    }
     useEffect(() => {
-        const getUser = async () => {
-            const response = await client.getCurrUser();
-            setUser(response)
-        }
         getUser()
     }, [pathname])
 

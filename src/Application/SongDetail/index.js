@@ -1,4 +1,4 @@
-import { useLocation, useParams } from "react-router"
+import { useParams } from "react-router"
 import "./index.css"
 import { FcLike } from "react-icons/fc";
 import { FcDislike } from "react-icons/fc";
@@ -10,14 +10,14 @@ import * as client from "../client"
 import { MdDeleteSweep } from "react-icons/md";
 function SongDetail() {
     const { sid } = useParams()
-
-
+    const [addError, setAddError] = useState()
     const [playlist, setPlaylist] = useState()
     const [user, setUser] = useState()
     const [songDetail, setSongDetail] = useState()
     const [comment, setComment] = useState()
     const [likes, setLikes] = useState()
     const [newComment, setNewComments] = useState()
+
     const getSongDetail = async () => {
         const response = await client.getSongDetail(sid)
         setSongDetail(response)
@@ -25,48 +25,61 @@ function SongDetail() {
     const fetchUser = async () => {
         const response = await client.getCurrUser()
         setUser(response)
-        setPlaylist(response.myPlaylist)
-        setLikes(response.likedSong)
-        setNewComments({ user:{_id:response._id, userName:response.userName} , comment: "" })
+        setNewComments("")
     }
     const fetchComment = async () => {
         const response = await client.fetchComments(sid)
         setComment(response)
     }
 
-
-    const handleLike = async (like, sid) => {
-        const response = await client.handleLikeSong(like, sid, user._id)
-        setSongDetail({ ...songDetail, likes: like ? songDetail.likes + 1 : songDetail.likes - 1 })
+    const fetchPlaylist = async () => {
+        const response = await client.getPlaylistByUser()
+        setPlaylist(response)
+    }
+    const fetchLikedSong = async () => {
+        const response = await client.getLikedSongByUser()
         setLikes(response)
+    }
+    const handleLike = async (like, sid) => {
+        await client.handleLikeSong(like, sid, user._id)
+        setSongDetail({ ...songDetail, likes: like ? songDetail.likes + 1 : songDetail.likes - 1 })
+        await fetchLikedSong()
     }
 
     const handleCommentPost = async () => {
-        const response = await client.postComment(newComment.comment, sid)
-        fetchComment()
+        await client.postComment(newComment, sid)
+        await fetchComment()
     }
 
-    const handleCommentDelete = async (item) =>{
-        
-        const commentUser = item.user
-        const commentText = item.comment
-        const response = await client.deleteComment(commentText,sid,commentUser._id)
-        fetchComment()
+    const handleCommentDelete = async (item) => {
+        await client.deleteComment(sid, item._id)
+        await fetchComment()
+    }
+
+    const handleAddToPlaylist = async (pid) => {
+        try {
+            await client.addToPlaylist(pid, sid)
+            setAddError("")
+        }
+        catch (err) {
+            setAddError(err.response.data.message)
+        }
+
     }
 
     useEffect(() => {
-        fetchUser();
-        getSongDetail();
-        fetchComment();
+        getSongDetail()
+        fetchComment()
+        fetchUser()
+        fetchLikedSong()
     }, [sid]);
     return (
         <div className="wd-song-detail-holder">
+            {console.log(songDetail)}
             {
                 songDetail &&
                 <div className="wd-song-detail container">
                     <div className="wd-song-detail-info d-flex pt-3">
-
-
                         <img src={songDetail.image} />
                         <div className="wd-song-info ms-5">
                             <h4>{songDetail.name}</h4>
@@ -76,30 +89,34 @@ function SongDetail() {
                                 <source src={songDetail.preview} type="audio/mpeg" />
                             </audio>
                             <br />
-                            {user && <div className="btn-group mt-2">
-                                <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {user && user.role !== "User" && <div className="btn-group mt-2 mb-4">
+                                <button className="btn btn-secondary dropdown-toggle" onClick={fetchPlaylist} type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Add to Playlist
                                 </button>
                                 <ul className="dropdown-menu">
+                                    
                                     {
                                         playlist && playlist.length >= 1 ?
                                             playlist.map((item) => (
-                                                <li><button type="button" className="dropdown-item" >{item}</button></li>
+                                                
+                                                <li><button type="button" className="dropdown-item" onClick={() => handleAddToPlaylist(item._id)}>{item.name}</button></li>
                                             )) :
                                             <li className="ms-3">No Playlist Found</li>
                                     }
 
                                 </ul>
                             </div>}
-                            <br />
-                            {user &&
+                            {user && likes &&
                                 <>
-                                    {!likes.includes(songDetail._id) ?
-                                        <button className="btn btn-transparent mt-2" onClick={() => handleLike(true, songDetail._id)}><FcLike /></button> :
-                                        <button className="btn btn-transparent mt-2" onClick={() => handleLike(false, songDetail._id)}><FcDislike /></button>
-                                    }
+                                    {!likes.some((item) => item.sid === sid) ?
+                                        <button className="btn btn-transparent mb-4" onClick={() => handleLike(true, songDetail._id)}><FcLike /></button> :
+                                        <button className="btn btn-transparent mb-4" onClick={() => handleLike(false, songDetail._id)}><FcDislike /></button>}
+
                                 </>
                             }
+                            <br />
+                            {addError && <span className="mt-5 alert alert-secondary">{addError}</span>}
+
 
                         </div>
 
@@ -112,15 +129,15 @@ function SongDetail() {
                         {comment && <ul className="list-group">
                             {
                                 comment.map((item) => (
-                                    <li className="list-group-item ">
+                                    <li key={item._id} className="list-group-item ">
                                         <div className="d-flex">
                                             <BiUserCircle className="me-2" />
                                             <Link to={`/Application/Profile/${item.user._id}`} className="wd-song-comment-user">
                                                 {item.user.userName}
                                             </Link>
                                             <div className="wd-comment-action">
-                                                {user && (user.userName === item.user.userName || user.role === "Admin") 
-                                                    && <button className="btn btn-transparent me-2" onClick={() => handleCommentDelete(item)}><MdDeleteSweep/></button>}
+                                                {user && (user.userName === item.user.userName || user.role === "Admin")
+                                                    && <button className="btn btn-transparent me-2" onClick={() => handleCommentDelete(item)}><MdDeleteSweep /></button>}
                                             </div>
                                         </div>
 
@@ -135,7 +152,7 @@ function SongDetail() {
                         <hr className="mb-2 mt-3" />
                         <div className="mb-2">
                             <label for="comment" class="form-label">Enter Comments</label>
-                            <textarea class="form-control" id="comment" rows="3" onChange={(e) => setNewComments({...newComment, comment:e.target.value})}></textarea>
+                            <textarea class="form-control" id="comment" rows="3" onChange={(e) => setNewComments({ ...newComment, comment: e.target.value })}></textarea>
                             <div className="float-end mt-2 mb-3">
                                 <button className={`btn btn-primary ${!user && "disabled"}`} onClick={handleCommentPost}>Post</button>
                             </div>

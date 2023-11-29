@@ -1,8 +1,27 @@
 import "./index.css"
 import playlistCover from "./plCover.jpg"
 import cover from "./cover.jpg"
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
+import { useEffect, useState } from "react"
+import * as client from "../client"
 function Playlist() {
+
+    const [playlist, setPlaylist] = useState()
+    const { pid } = useParams()
+    const [user, setUser] = useState()
+    const fetchPlaylist = async () => {
+        const response = await client.fetchPlaylistDetail(pid)
+        setPlaylist(response)
+    }
+    const fetchUser = async () => {
+        const response = await client.getCurrUser()
+        setUser(response)
+    }
+    useEffect(() => {
+        fetchPlaylist()
+        fetchUser()
+    }, [pid])
+
 
     const samplePlaylist = {
         title: "Sample Playlist",
@@ -23,42 +42,42 @@ function Playlist() {
 
     return (
         <div className="wd-playlist-detail-container">
-            <div className="wd-playlist-detail container">
-                <div className="wd-playlist-detail-info d-flex pt-3 ">
-                    <img src={playlistCover} />
-                    <div className="ms-5">
-                        <h4>{samplePlaylist.title}</h4>
-                        <p>{samplePlaylist.author}</p>
-                        <p>Views: {samplePlaylist.view}</p>
+            {console.log(playlist)}
+            {playlist &&
+                <div className="wd-playlist-detail container">
+                    <div className="wd-playlist-detail-info d-flex pt-3 ">
+                        <img src={playlistCover} />
+                        <div className="ms-5">
+                            <h4>{playlist.name}</h4>
+                            <p>{playlist.author.name}</p>
+                            <p>Like: {playlist.likes}</p>
 
-                        <h4>Description:</h4>
+                            <h4>Description:</h4>
 
-                        {samplePlaylist.desc}
+                            {playlist.description}
+                        </div>
                     </div>
-                </div>
-                <hr/>
-                <table className="table table-striped mt-3">
-                    <tbody>
-                        {samplePlaylist.songs.map((item, index) => (
-                            <tr key={index} className="row">
-                                <td className="col-4">
-                                    <img src={cover} alt="Song Cover" />
-                                </td>
-                                <td className="col-3">
-                                    <Link to={`/Application/Songs/${item.sid}`} className="d-flex">
-                                        <p className="me-5">{item.sname}</p>
-                                    </Link>
-                                </td>
-                                <td className="col-3">
-                                    <Link to={`/Application/Profile/${item.aid}`}>
-                                        <p className="ms-2">{item.author}</p>
-                                    </Link>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                    <hr />
+                    <table className="table table-striped mt-3">
+                        <tbody>
+                            {playlist.newSongs && playlist.newSongs.map((item, index) => (
+                                <tr key={index} className="row">
+                                    <td className="col-4">
+                                        <img src={item.image} alt="Song Cover" />
+                                    </td>
+                                    <td className="col-3">
+                                        <Link to={`/Application/Songs/${item.sid}`} className="d-flex">
+                                            <p className="me-5">{item.name}</p>
+                                        </Link>
+                                    </td>
+                                    <td className="col-3">
+                                        <p className="ms-2">{item.artist}</p>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>}
         </div>
 
     )

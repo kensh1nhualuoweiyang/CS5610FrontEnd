@@ -43,15 +43,10 @@ export const getSongDetail = async (sid) =>{
     return response.data
 }
 
-export const getLikeSongs = async (uid) => {
-    const response = await request.get(`${BASE_API}/likesSong?uid=${uid}`)
-    return response.data
-}
+
 
 export const handleLikeSong = async (like,sid,uid) => { 
-    const response = await request.put(`${BASE_API}/songs?like=${like}&sid=${sid}&uid=${uid}`)
-    await request.put(`${BASE_API}/songLikes?like=${like}&sid=${sid}`)
-    return response.data
+    await request.put(`${BASE_API}/songLikes?like=${like}&sid=${sid}&uid=${uid}`)
 }
 
 export const fetchComments = async (sid) => {
@@ -60,9 +55,62 @@ export const fetchComments = async (sid) => {
 }
 
 export const postComment = async (comment,sid) => {
-    const response = await request.post(`${BASE_API}/comments?sid=${sid}&comment=${comment}`)
+    await request.post(`${BASE_API}/comments?sid=${sid}&comment=${comment}`)
 }
 
-export const deleteComment = async (comment, sid, uid) => {
-    const response = await request.delete(`${BASE_API}/comments?sid=${sid}&comment=${comment}&uid=${uid}`)
+export const deleteComment = async (sid,id) => {
+    await request.delete(`${BASE_API}/comments?sid=${sid}&commentId=${id}`)
 }
+
+export const addToPlaylist = async (pid,sid) =>{
+    const response = await request.put(`${BASE_API}/AddToPlayList?id=${pid}&sid=${sid}`)
+
+    return response
+}
+
+export const getPlaylistByUser = async (id) => {
+    const response = await request.get(`${BASE_API}/userPlaylist?uid=${id}`)
+    return response.data
+}
+
+export const createPlaylist = async (item) => {
+    const {name,description} = item
+    const response = await request.post(`${BASE_API}/playlist?name=${name}&description=${description}`)
+    return response.data
+}
+
+export const deletePlaylist = async (id) => {
+    const response = await request.delete(`${BASE_API}/playlist?id=${id}`)
+    return response.data
+}
+
+export const getLikedPlaylistByUser = async (id) => {
+    const response = await request.get(`${BASE_API}/likedPlaylist?uid=${id}`)
+    return response.data
+}
+
+export const getLikedSongByUser = async (id) => {
+    const response = await request.get(`${BASE_API}/likedSong?uid=${id}`)
+    return response.data
+}
+
+export const getFollowerByUser = async (id) => {
+    const response = await request.get(`${BASE_API}/follower?uid=${id}`)
+    return response.data
+}
+
+export const getFollowingByUser = async (id) => {
+    const response = await request.get(`${BASE_API}/following?uid=${id}`)
+    return response.data
+}
+
+export const updateFollows = async(follow,id) => {
+    const response = await request.put(`${BASE_API}/followers?follow=${follow}&id=${id}`)
+    return response.data
+}
+
+export const fetchPlaylistDetail = async (pid) => {
+    const response = await request.get(`${BASE_API}/playlist?pid=${pid}`)
+    return response.data
+}
+

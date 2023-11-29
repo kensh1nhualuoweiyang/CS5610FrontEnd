@@ -1,66 +1,103 @@
 import "./index.css"
 import { FaRegUserCircle } from "react-icons/fa"
 import { Route, Routes, Navigate, useParams, Link, useLocation } from "react-router-dom"
-import ProfileSongs from "./profileSongs"
-import ProfilePlaylist from "./playlist"
+import LikedSongs from "./likedSongs"
+import ProfilePlaylist from "./likedPlaylist"
 import ProfileFollower from "./followers"
 import ProfileFollowing from "./following"
 import { useState } from "react"
 import * as client from "../client"
 import { useEffect } from "react"
+import MyPlaylist from "./myPlaylist"
 function Profile() {
     const linklist = ["Liked Songs", "Liked Playlist", "Followers", "Followings"];
     const { pathname } = useLocation();
     const { uid } = useParams();
+    const [rerender, setRerednder] = useState(false)
     const [currentUser, setCurrentUser] = useState()
     const [user, setUser] = useState()
+    const [follower, setFollower] = useState()
+    const [following, setFollowing] = useState()
+
+    const fetchUser = async () => {
+        const response = await client.getUserInfo(uid)
+        setUser(response)
+        fetchFollower()
+        fetchFollowing()
+    }
+
     useEffect(() => {
         const getCurrUser = async () => {
             const response = await client.getCurrUser()
             setCurrentUser(response)
         }
-        const getUser = async () => {
-            const response = await client.getUserInfo(uid)
-            setUser(response)
-        }
         getCurrUser()
-        getUser()
+        fetchUser()
     }, [uid])
+    const fetchFollower = async () => {
+        const response = await client.getFollowerByUser(uid)
+        setFollower(response)
+    }
+    const fetchFollowing = async () => {
+        const response = await client.getFollowingByUser(uid)
+        setFollowing(response)
+    }
+
+    const handleFollow = async (follows) => {
+        await client.updateFollows(follows,uid)
+        fetchFollower()
+        setRerednder(true)
+    }
+
+
+
     return (
         <>
             {user &&
                 <div className="wd-profile">
-                    {console.log(user)}
-                    {console.log(currentUser)}
                     <div className="wd-profile-header">
                         <FaRegUserCircle />
                         <h3 className="mt-2 wd-profile-user-name">{user.userName}</h3>
-                        <button className="btn btn-secondary">Follow</button>
+
+                        {follower && currentUser && currentUser._id !== uid && 
+                            !follower.some((item) => item._id === currentUser._id) &&
+                            <button className="btn btn-secondary" onClick={() => handleFollow(true)}>Follow</button>
+                        }
+                        {follower && currentUser && currentUser._id !== uid && 
+                            follower.some((item) => item._id === currentUser._id) &&
+                            <button className="btn btn-secondary" onClick={() => handleFollow(false)}>Unfollow</button>
+                        }
                         <div className="d-flex wd-profile-header-followInfo">
-                            <p>Followers: 0</p>
-                            <p>Follwing: 0</p>
+                            {follower && <p>Followers: {follower.length}</p>}
+                            {following && <p>Follwing: {following.length}</p>}
                         </div>
                     </div>
                     <div className="wd-profile-body">
 
                         <div className="wd-profile-main-nav">
                             <ul className="nav nav-tabs">
+
                                 {
                                     linklist.map((item, index) => (
-                                        <li className="nav-item">
+                                        <li key={index} className="nav-item">
                                             <Link className={`nav-link ${decodeURIComponent(pathname).includes(item) && "active"}`} to={`/Application/Profile/${uid}/${item}`}>{item}</Link>
                                         </li>
                                     ))
 
                                 }
+                                {currentUser && currentUser._id === uid && currentUser.role !== "User" && <li className="nav-item">
+                                    <Link className={`nav-link ${decodeURIComponent(pathname).includes("My Playlist") && "active"}`} to={`/Application/Profile/${uid}/My Playlist`}>My Playlist</Link>
+                                </li>}
                             </ul>
                         </div>
                         <Routes>
+
                             <Route path="/" element={<Navigate to={"Liked Songs"} />} />
-                            <Route path="Liked Songs" element={<ProfileSongs />} />
+                            <Route path="My Playlist" element={<MyPlaylist />} />
+                            <Route path="Liked Songs" element={<LikedSongs />} />
                             <Route path="Liked Playlist" element={<ProfilePlaylist />} />
-                            <Route path="Followers" element={<ProfileFollower />} />
-                            <Route path="Followings" element={<ProfileFollowing />} />
+                            <Route path="Followers" element={<ProfileFollower rerender={rerender} setRerender={setRerednder}/>} />
+                            <Route path="Followings" element={<ProfileFollowing updateProfile={fetchUser}/>} />
                         </Routes>
                     </div>
 

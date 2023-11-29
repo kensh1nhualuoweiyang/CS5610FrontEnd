@@ -1,12 +1,10 @@
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import "./index.css"
 import { useState } from "react"
 import * as client from "../client"
-import { useEffect } from "react"
 function Login() {
     const navigate = useNavigate()
     const [err, setErr] = useState()
-    const {pathname} = useLocation()
     const [credentials, setCredentials] = useState({
         userName:"",
         password:""
@@ -20,12 +18,7 @@ function Login() {
             setErr(err.response.data.message);
         }
     }
-    useEffect(() => {
-        setCredentials({
-            userName:"",
-            password:""
-        })
-    },[pathname])
+   
     return (
         <div className="wd-login-content" >
             {err && <p className="alert alert-danger">{err}</p>}

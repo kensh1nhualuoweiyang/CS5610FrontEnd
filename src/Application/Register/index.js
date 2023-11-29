@@ -2,9 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import "./index.css"
 import { useState } from "react"
 import * as client from "../client"
-import { useEffect } from "react"
 function Register() {
-    const {pathname} = useLocation()
     const [error, setError] = useState()
     const [account, setAccount] = useState({
         userName: "",
@@ -22,14 +20,7 @@ function Register() {
             setError(err.response.data.message);
         }
     }
-    useEffect(() => {
-        setAccount({
-            userName: "",
-            password: "",
-            email: "",
-            role: "User"
-        })
-    }, [pathname])
+   
     return (
         <div className="wd-register-content " >
             {error && <p className="alert alert-danger">{error}</p>}
