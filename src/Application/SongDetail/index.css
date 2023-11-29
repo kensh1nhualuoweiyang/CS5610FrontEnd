@@ -1,5 +1,6 @@
 .wd-song-detail{
     margin-top: 200px;
+    height: 100vh;
 }
 
 .wd-song-detail-info{
@@ -27,6 +28,11 @@
 .wd-comment-action button{
     padding: 0;
     margin-right: 0;
+}
+
+.wd-report-button{
+    width: 60px;
+    height: 40px;
 }
 
 .wd-song-comments ul li{

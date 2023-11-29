@@ -9,6 +9,7 @@ import { useState } from "react"
 import * as client from "../client"
 import { useEffect } from "react"
 import MyPlaylist from "./myPlaylist"
+import Reports from "./reports"
 function Profile() {
     const linklist = ["Liked Songs", "Liked Playlist", "Followers", "Followings"];
     const { pathname } = useLocation();
@@ -88,6 +89,9 @@ function Profile() {
                                 {currentUser && currentUser._id === uid && currentUser.role !== "User" && <li className="nav-item">
                                     <Link className={`nav-link ${decodeURIComponent(pathname).includes("My Playlist") && "active"}`} to={`/Application/Profile/${uid}/My Playlist`}>My Playlist</Link>
                                 </li>}
+                                {currentUser && currentUser._id === uid && currentUser.role === "Admin" && <li className="nav-item">
+                                    <Link className={`nav-link ${decodeURIComponent(pathname).includes("Reports") && "active"}`} to={`/Application/Profile/${uid}/Reports`}>Reports</Link>
+                                </li>}
                             </ul>
                         </div>
                         <Routes>
@@ -95,6 +99,7 @@ function Profile() {
                             <Route path="/" element={<Navigate to={"Liked Songs"} />} />
                             <Route path="My Playlist" element={<MyPlaylist />} />
                             <Route path="Liked Songs" element={<LikedSongs />} />
+                            <Route path="Reports" element={<Reports/>} />
                             <Route path="Liked Playlist" element={<ProfilePlaylist />} />
                             <Route path="Followers" element={<ProfileFollower rerender={rerender} setRerender={setRerednder}/>} />
                             <Route path="Followings" element={<ProfileFollowing updateProfile={fetchUser}/>} />

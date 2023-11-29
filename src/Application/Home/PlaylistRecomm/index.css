@@ -20,11 +20,17 @@
 }
 
 .wd-playlist-card  {
+
     flex-shrink: 0;
     width: 250px;
     max-height: 300px;
     border: transparent;
     display: flex;
+}
+
+
+.wd-playlist-card .card-body,.card-text{
+    background-color:  rgb(218, 213, 213);
 }
 
 .wd-playlist-slide-item.card-img-top { /* Target only the card images */

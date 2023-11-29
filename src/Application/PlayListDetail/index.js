@@ -1,14 +1,16 @@
 import "./index.css"
-import playlistCover from "./plCover.jpg"
-import cover from "./cover.jpg"
+import playlistCover from "./cover.jpg"
 import { Link, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import * as client from "../client"
+import { FcLike } from "react-icons/fc";
+import { FcDislike } from "react-icons/fc";
 function Playlist() {
 
     const [playlist, setPlaylist] = useState()
     const { pid } = useParams()
     const [user, setUser] = useState()
+    const [like, setLikes] = useState()
     const fetchPlaylist = async () => {
         const response = await client.fetchPlaylistDetail(pid)
         setPlaylist(response)
@@ -17,46 +19,47 @@ function Playlist() {
         const response = await client.getCurrUser()
         setUser(response)
     }
+
+    const fetchLikedPlaylist = async () => {
+        const response = await client.getLikedPlaylistByUser()
+        setLikes(response)
+    }
+
+    const handleLike = async (like, pid) => {
+        await client.updateLikedPlaylist(like,pid)
+        fetchLikedPlaylist()
+        setPlaylist({...playlist, likes: playlist.likes + (like?1:-1)})
+    }
+
     useEffect(() => {
         fetchPlaylist()
         fetchUser()
+        fetchLikedPlaylist()
     }, [pid])
-
-
-    const samplePlaylist = {
-        title: "Sample Playlist",
-        author: "Sample Author",
-        desc: "Description Sentence sample",
-        view: 0,
-        songs: [
-            { sid: 0, sname: "ExampleSongName1", author: "ExampleAuthor", aid: 1 },
-            { sid: 1, sname: "ExampleSongName2", author: "ExampleAuthor", aid: 2 },
-            { sid: 2, sname: "ExampleSongName3", author: "ExampleAuthor", aid: 3 },
-            { sid: 3, sname: "ExampleSongName4", author: "ExampleAuthor", aid: 4 },
-            { sid: 4, sname: "ExampleSongName5", author: "ExampleAuthor", aid: 5 },
-            { sid: 5, sname: "ExampleSongName6", author: "ExampleAuthor", aid: 6 },
-            { sid: 6, sname: "ExampleSongName8", author: "ExampleAuthor", aid: 7 },
-
-        ]
-    }
 
     return (
         <div className="wd-playlist-detail-container">
-            {console.log(playlist)}
             {playlist &&
                 <div className="wd-playlist-detail container">
                     <div className="wd-playlist-detail-info d-flex pt-3 ">
                         <img src={playlistCover} />
                         <div className="ms-5">
                             <h4>{playlist.name}</h4>
-                            <p>{playlist.author.name}</p>
-                            <p>Like: {playlist.likes}</p>
-
+                            <p>Author: <Link to={`/Application/Profile/${playlist.author._id}`}>{playlist.author.userName}</Link></p>
+                            <p className="mb-0">Like: {playlist.likes}</p>
+                            {
+                                user && like &&
+                                <>
+                                    {!like.some((item) => item._id === playlist._id) ?
+                                        <button className="btn btn-transparent  p-0" onClick={() => handleLike(true, playlist._id)}><FcLike /></button> :
+                                        <button className="btn btn-transparent p-0" onClick={() => handleLike(false, playlist._id)}><FcDislike /></button>}
+                                </>
+                            }
                             <h4>Description:</h4>
-
                             {playlist.description}
                         </div>
                     </div>
+
                     <hr />
                     <table className="table table-striped mt-3">
                         <tbody>

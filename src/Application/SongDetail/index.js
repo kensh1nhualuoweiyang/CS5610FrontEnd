@@ -8,6 +8,7 @@ import { useState } from "react"
 import { useEffect } from "react"
 import * as client from "../client"
 import { MdDeleteSweep } from "react-icons/md";
+import { MdOutlineReport } from "react-icons/md";
 function SongDetail() {
     const { sid } = useParams()
     const [addError, setAddError] = useState()
@@ -17,7 +18,9 @@ function SongDetail() {
     const [comment, setComment] = useState()
     const [likes, setLikes] = useState()
     const [newComment, setNewComments] = useState()
-
+    const [report, setReport] = useState("")
+    const [reportErr, setReportErr] = useState("")
+    const [commentErr, setCommentErr] = useState("")
     const getSongDetail = async () => {
         const response = await client.getSongDetail(sid)
         setSongDetail(response)
@@ -47,8 +50,16 @@ function SongDetail() {
     }
 
     const handleCommentPost = async () => {
-        await client.postComment(newComment, sid)
-        await fetchComment()
+        try{
+            await client.postComment(newComment, sid)
+            await fetchComment()
+            setNewComments("")
+            setCommentErr("")
+        }
+        catch(err){
+            setCommentErr(err.response.data.message)
+        }
+       
     }
 
     const handleCommentDelete = async (item) => {
@@ -67,6 +78,17 @@ function SongDetail() {
 
     }
 
+    const handleReport = async (commentText, cid) => {
+        try {
+            await client.createReport(commentText, report, cid, sid)
+            setReportErr("")
+            setReport("")
+        }
+        catch (err) {
+            setReportErr(err.response.data.message)
+        }
+    }
+
     useEffect(() => {
         getSongDetail()
         fetchComment()
@@ -75,7 +97,6 @@ function SongDetail() {
     }, [sid]);
     return (
         <div className="wd-song-detail-holder">
-            {console.log(songDetail)}
             {
                 songDetail &&
                 <div className="wd-song-detail container">
@@ -94,11 +115,11 @@ function SongDetail() {
                                     Add to Playlist
                                 </button>
                                 <ul className="dropdown-menu">
-                                    
+
                                     {
                                         playlist && playlist.length >= 1 ?
                                             playlist.map((item) => (
-                                                
+
                                                 <li><button type="button" className="dropdown-item" onClick={() => handleAddToPlaylist(item._id)}>{item.name}</button></li>
                                             )) :
                                             <li className="ms-3">No Playlist Found</li>
@@ -127,6 +148,7 @@ function SongDetail() {
                     <div className="wd-song-comments">
                         <h4>Comments</h4>
                         {comment && <ul className="list-group">
+                            {console.log(comment)}
                             {
                                 comment.map((item) => (
                                     <li key={item._id} className="list-group-item ">
@@ -136,8 +158,22 @@ function SongDetail() {
                                                 {item.user.userName}
                                             </Link>
                                             <div className="wd-comment-action">
+                                                <button type="button" className="btn float-end  btn-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                                    <MdOutlineReport />
+                                                </button>
+
                                                 {user && (user.userName === item.user.userName || user.role === "Admin")
                                                     && <button className="btn btn-transparent me-2" onClick={() => handleCommentDelete(item)}><MdDeleteSweep /></button>}
+                                                <form className="dropdown-menu p-4">
+                                                    <div className="mb-3">
+                                                        {reportErr && <span className="alert alert-warning">{reportErr}</span>}
+                                                        <label for="title" className="form-label">Report Reason</label>
+                                                        <input type="text" className="form-control" id="title" value={report} onChange={(e) => setReport(e.target.value)} />
+                                                    </div>
+
+                                                    <button type="submit" className="wd-report-button btn btn-primary" onClick={() => handleReport(item.comment, item._id)}>Send</button>
+                                                </form>
+
                                             </div>
                                         </div>
 
@@ -150,9 +186,10 @@ function SongDetail() {
                             }
                         </ul>}
                         <hr className="mb-2 mt-3" />
+                        {commentErr && <div className="alert alert-warning">{commentErr}</div>}
                         <div className="mb-2">
                             <label for="comment" class="form-label">Enter Comments</label>
-                            <textarea class="form-control" id="comment" rows="3" onChange={(e) => setNewComments({ ...newComment, comment: e.target.value })}></textarea>
+                            <textarea class="form-control" id="comment" rows="3" onChange={(e) => setNewComments(e.target.value)}></textarea>
                             <div className="float-end mt-2 mb-3">
                                 <button className={`btn btn-primary ${!user && "disabled"}`} onClick={handleCommentPost}>Post</button>
                             </div>

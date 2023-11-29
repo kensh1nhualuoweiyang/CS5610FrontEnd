@@ -114,3 +114,37 @@ export const fetchPlaylistDetail = async (pid) => {
     return response.data
 }
 
+
+export const updateLikedPlaylist = async (like, pid) => {
+    const response = await request.put(`${BASE_API}/playlist?like=${like}&pid=${pid}`)
+    return response.data
+}
+
+export const fetchPlaylistSearch = async (keyword) => {
+    const response = await request.get(`${BASE_API}/playlistResult?keyword=${keyword}`)
+    return response.data
+}
+
+export const fetchSongRec = async () => {
+    const response = await request.get(`${BASE_API}/songRec`)
+    return response.data
+}
+
+export const fetchPlaylistRec = async () => {
+    const response = await request.get(`${BASE_API}/playlistRec`)
+    return response.data
+}
+
+export const createReport = async (text,reason,cid,sid) => {
+    const response = await request.post(`${BASE_API}/report?text=${text}&reason=${reason}&cid=${cid}&sid=${sid}`)
+    return response.data
+}
+
+export const fetchReport = async () =>{
+    const response = await request.get(`${BASE_API}/reports`)
+    return response.data
+}
+export const resolveReport  = async (deleteReport,id) => {
+    const response = await request.put(`${BASE_API}/resolve?deleteReport=${deleteReport}&id=${id}`)
+    return response.data
+}
