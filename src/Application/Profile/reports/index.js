@@ -1,5 +1,5 @@
-import { Link, useParams } from "react-router-dom";
-import "./index.css"
+import { useParams } from "react-router-dom";
+
 import { useState } from "react";
 import { useEffect } from "react";
 import * as client from "../../client"
@@ -26,7 +26,7 @@ function Reports() {
 
 
     return (
-        <div className="container mt-3">
+        <div className="container mt-3 mb-5">
             <div className="list-group">
                 {
                     report &&

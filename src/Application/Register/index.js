@@ -36,7 +36,6 @@ function Register() {
                 <select className="form-select" id="role" value={account.role} onChange={(e) => (setAccount({ ...account, role: e.target.value }))}>
                     <option value={"User"}>User</option>
                     <option value={"Creator"}>Creator</option>
-                    <option value={"Admin"}>Admin</option>
                 </select>
                 <button className="btn btn-secondary mt-3 mb-3 me-3" onClick={handleRegister}>Register</button>
                 <Link to="/Application/Home" className="btn btn-secondary mt-3 mb-3">Cancel</Link>

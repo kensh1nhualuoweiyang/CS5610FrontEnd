@@ -1,4 +1,4 @@
-import { useParams } from "react-router"
+import { useLocation, useNavigate, useParams } from "react-router"
 import "./index.css"
 import { FcLike } from "react-icons/fc";
 import { FcDislike } from "react-icons/fc";
@@ -11,6 +11,8 @@ import { MdDeleteSweep } from "react-icons/md";
 import { MdOutlineReport } from "react-icons/md";
 function SongDetail() {
     const { sid } = useParams()
+    const {pathname} = useLocation()
+    const navigate = useNavigate()
     const [addError, setAddError] = useState()
     const [playlist, setPlaylist] = useState()
     const [user, setUser] = useState()
@@ -22,13 +24,16 @@ function SongDetail() {
     const [reportErr, setReportErr] = useState("")
     const [commentErr, setCommentErr] = useState("")
     const getSongDetail = async () => {
-        const response = await client.getSongDetail(sid)
+        const response = await client.getSongDetail(sid,pathname)
+        console.log("here");
         setSongDetail(response)
     }
     const fetchUser = async () => {
         const response = await client.getCurrUser()
         setUser(response)
         setNewComments("")
+        fetchLikedSong()
+
     }
     const fetchComment = async () => {
         const response = await client.fetchComments(sid)
@@ -93,8 +98,7 @@ function SongDetail() {
         getSongDetail()
         fetchComment()
         fetchUser()
-        fetchLikedSong()
-    }, [sid]);
+    }, [pathname]);
     return (
         <div className="wd-song-detail-holder">
             {
@@ -188,10 +192,10 @@ function SongDetail() {
                         <hr className="mb-2 mt-3" />
                         {commentErr && <div className="alert alert-warning">{commentErr}</div>}
                         <div className="mb-2">
-                            <label for="comment" class="form-label">Enter Comments</label>
-                            <textarea class="form-control" id="comment" rows="3" onChange={(e) => setNewComments(e.target.value)}></textarea>
+                            <label for="comment" className="form-label">Enter Comments</label>
+                            <textarea className="form-control" id="comment" rows="3" onChange={(e) => setNewComments(e.target.value)}></textarea>
                             <div className="float-end mt-2 mb-3">
-                                <button className={`btn btn-primary ${!user && "disabled"}`} onClick={handleCommentPost}>Post</button>
+                                <button className="btn btn-primary" onClick={user? handleCommentPost : () => navigate("/Application/Login")}>Post</button>
                             </div>
                         </div>
                     </div>

@@ -38,8 +38,11 @@ export const searchSongs = async (keyword) => {
     return response.data
 }
 
-export const getSongDetail = async (sid) =>{
+export const getSongDetail = async (sid,url) =>{
+    console.log("here")
     const response = await request.get(`${BASE_API}/songDetail?sid=${sid}`)
+    console.log("done");
+    console.log(response);
     return response.data
 }
 
@@ -146,5 +149,25 @@ export const fetchReport = async () =>{
 }
 export const resolveReport  = async (deleteReport,id) => {
     const response = await request.put(`${BASE_API}/resolve?deleteReport=${deleteReport}&id=${id}`)
+    return response.data
+}
+
+export const updateProfile = async (item) => {
+    const response = await request.put(`${BASE_API}/updateProfile`,item)
+    return response.data
+}
+
+export const requestRole = async (uid,role) => {
+    const response = await request.post(`${BASE_API}/request?uid=${uid}&role=${role}`)
+    return response.data
+}
+
+export const fetchRequest = async () => {
+    const response = await request.get(`${BASE_API}/request`)
+    return response.data
+}
+
+export const processRequest = async(accept,id,uid,role) => {
+    const response = await request.put(`${BASE_API}/request?accept=${accept}&id=${id}&uid=${uid}&role=${role}`)
     return response.data
 }

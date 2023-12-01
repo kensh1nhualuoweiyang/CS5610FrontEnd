@@ -1,10 +1,10 @@
 .wd-profile{
-    margin-top: 200px;
+    margin-top: 100px;
 }
 
 .wd-profile-header{
     text-align: center;
-    height: 350px;
+    height: 450px;
     align-items: center;
     justify-content: center;
     background-image: url("./cover.jpg");
@@ -12,7 +12,7 @@
 .wd-profile-header svg{
     width: 100px;
     height: 100px;
-    margin-top: 50px;
+    margin-top: 150px;
     color:white;
 }
 
@@ -22,7 +22,7 @@
     color: white;
 }
 .wd-profile-header-followInfo{
-    margin-top: 90px;
+    margin-top: 100px;
     margin-left: 200px;
     color: white;
 }
