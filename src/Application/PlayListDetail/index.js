@@ -17,6 +17,7 @@ function Playlist() {
     }
     const fetchUser = async () => {
         const response = await client.getCurrUser()
+        fetchLikedPlaylist()
         setUser(response)
     }
 
@@ -28,13 +29,12 @@ function Playlist() {
     const handleLike = async (like, pid) => {
         await client.updateLikedPlaylist(like,pid)
         fetchLikedPlaylist()
-        setPlaylist({...playlist, likes: playlist.likes + (like?1:-1)})
+        fetchPlaylist()
     }
 
     useEffect(() => {
         fetchPlaylist()
         fetchUser()
-        fetchLikedPlaylist()
     }, [pid])
 
     return (
