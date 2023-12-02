@@ -25,7 +25,7 @@ function SongDetail() {
     const [commentErr, setCommentErr] = useState("")
     const getSongDetail = async () => {
         const response = await client.getSongDetail(sid,pathname)
-        console.log("here");
+        fetchComment()
         setSongDetail(response)
     }
     const fetchUser = async () => {
@@ -96,7 +96,7 @@ function SongDetail() {
 
     useEffect(() => {
         getSongDetail()
-        fetchComment()
+       
         fetchUser()
     }, [pathname]);
     return (
