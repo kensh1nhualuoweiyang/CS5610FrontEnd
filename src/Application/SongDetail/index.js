@@ -133,6 +133,7 @@ function SongDetail() {
                             </div>}
                             {user && likes &&
                                 <>
+                                    
                                     {!likes.some((item) => item.sid === sid) ?
                                         <button className="btn btn-transparent mb-4" onClick={() => handleLike(true, songDetail._id)}><FcLike /></button> :
                                         <button className="btn btn-transparent mb-4" onClick={() => handleLike(false, songDetail._id)}><FcDislike /></button>}
