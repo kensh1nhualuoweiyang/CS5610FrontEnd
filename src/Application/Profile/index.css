@@ -16,6 +16,9 @@
     color:white;
 }
 
+.wd-profile-main-nav .nav{
+    flex-wrap: nowrap;
+}
 
 
 .wd-profile-user-name{
